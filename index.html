@@ -671,6 +671,24 @@
     .vs-container { flex-direction: column; }
     .vs-divider { transform: rotate(90deg); }
     .rule-cards { grid-template-columns: 1fr; }
+    .game-container { padding: 10px; }
+    .info-card { padding: 14px; }
+    .diamond-container { max-width: 100%; }
+    .pos-tooltip {
+      position: relative !important;
+      left: 0 !important;
+      top: 0 !important;
+      max-width: 100% !important;
+      margin-top: 8px;
+      box-sizing: border-box;
+    }
+    .position-dot { r: 18; }
+    .field-label { font-size: 6px; }
+    .level-header { padding: 14px; }
+    .level-title { font-size: 13px; }
+    .nav-btns { gap: 10px; }
+    .nav-btn { padding: 10px 18px; font-size: 8px; }
+    .scenario { padding: 12px 14px; }
   }
 
   /* Interactive position labels on field */
@@ -1240,19 +1258,19 @@ document.querySelectorAll('.position-dot').forEach(dot=>{
     if(left + 220 > rect.width) left = cx * scaleX - 230;
     if(top < 0) top = 10;
 
-    tooltip.style.left = left + 'px';
-    tooltip.style.top = top + 'px';
+    // On mobile: place tooltip below the SVG as a card
+    if(window.innerWidth <= 600){
+      tooltip.style.left = '0';
+      tooltip.style.top = '0';
+    } else {
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    }
 
-    // Auto-hide after 5s
-    setTimeout(()=>tooltip.classList.remove('show'),5000);
+    // Auto-hide after 30s, cancelled if another position is tapped
+    if(window._tooltipTimer) clearTimeout(window._tooltipTimer);
+    window._tooltipTimer = setTimeout(()=>tooltip.classList.remove('show'),30000);
   });
-});
-
-// Hide tooltip when clicking elsewhere
-document.addEventListener('click',function(e){
-  if(!e.target.classList.contains('position-dot')){
-    document.getElementById('posTooltip').classList.remove('show');
-  }
 });
 
 // ============ QUIZ QUESTION BANK (40 questions) ============
